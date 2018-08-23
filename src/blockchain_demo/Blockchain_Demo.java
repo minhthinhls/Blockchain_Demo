@@ -7,7 +7,7 @@ package blockchain_demo;
 
 import com.google.gson.GsonBuilder;
 import model.Block;
-import static model.BlockChain.blockchain;
+import model.BlockChain;
 
 /**
  *
@@ -15,11 +15,29 @@ import static model.BlockChain.blockchain;
  */
 public class Blockchain_Demo {
 
+    
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        BlockChain blockchain = new BlockChain(5);
         // TODO code application logic here
+        blockchain.generateGenesisBlock();
+
+        blockchain.addBlock(new Block("Yo im the second block", blockchain.getCurrentBlock().hash));
+
+        blockchain.addBlock(new Block("Hey im the third block", blockchain.getCurrentBlock().hash));
+
+        System.out.println("\nBlockchain is Valid: " + blockchain.isChainValid());
+        
+        blockchain.getCurrentBlock().setData("HAHA");
+        System.out.println("\nBlockchain after tampering, is still Valid ? " + blockchain.isChainValid());
+        
+        String blockchainJson = new GsonBuilder().setPrettyPrinting().create().toJson(blockchain);
+        System.out.println("\nThe block chain: ");
+        System.out.println(blockchainJson);
+        
         /*
         Block genesisBlock = new Block("Hi im the first block", "0");
         System.out.println("Hash for block 1 : " + genesisBlock.hash);
@@ -30,13 +48,16 @@ public class Blockchain_Demo {
         Block thirdBlock = new Block("Hey im the third block", secondBlock.hash);
         System.out.println("Hash for block 3 : " + thirdBlock.hash);
          */
-        // Add our blocks to the blockchain ArrayList:
-        blockchain.add(new Block("Hi im the first block", "0"));
-        blockchain.add(new Block("Yo im the second block", blockchain.get(blockchain.size() - 1).hash));
-        blockchain.add(new Block("Hey im the third block", blockchain.get(blockchain.size() - 1).hash));
+        // Add our blocks to the chain ArrayList:
+        /*
+        chain.add(new Block("Hi im the first block", "0"));
+        chain.add(new Block("Yo im the second block", chain.get(chain.size() - 1).hash));
+        chain.add(new Block("Hey im the third block", chain.get(chain.size() - 1).hash));
 
-        String blockchainJson = new GsonBuilder().setPrettyPrinting().create().toJson(blockchain);
+        String blockchainJson = new GsonBuilder().setPrettyPrinting().create().toJson(chain);
         System.out.println(blockchainJson);
+         */
+        
     }
-
+    
 }

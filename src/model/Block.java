@@ -18,13 +18,27 @@ public class Block {
     public String previousHash;
     private String data; //our data will be a simple message.
     private long timeStamp; //as number of milliseconds since 1/1/1970.
+    private int nonce;
 
-    //Block Constructor.
+    // Basic Block Constructor.
+    public Block() {
+
+    }
+    
+    // Block Constructor for inserting data.
+    public Block(String data) {
+        this.data = data;
+        this.previousHash = null;
+        this.timeStamp = new Date().getTime();
+        this.hash = calculateHash(); // Making sure we do this after we set the other values.
+    }
+
+    // Block Constructor use for tampering data !!!
     public Block(String data, String previousHash) {
         this.data = data;
         this.previousHash = previousHash;
         this.timeStamp = new Date().getTime();
-        this.hash = calculateHash(); //Making sure we do this after we set the other values.
+        this.hash = calculateHash(); // Making sure we do this after we set the other values.
     }
 
     public String getHash() {
@@ -59,12 +73,30 @@ public class Block {
         this.timeStamp = timeStamp;
     }
 
+    public int getNonce() {
+        return nonce;
+    }
+
+    public void setNonce(int nonce) {
+        this.nonce = nonce;
+    }
+
     public String calculateHash() {
         String calculatedhash = StringUtil.applySha256(
                 previousHash
                 + Long.toString(timeStamp)
-                + data
+                + data + nonce
         );
         return calculatedhash;
     }
+
+    public void mineBlock(int difficulty) {
+        String target = new String(new char[difficulty]).replace('\0', '0'); //Create a string with difficulty * "0" 
+        while (!this.hash.substring(0, difficulty).equals(target)) {
+            this.nonce++;
+            this.hash = this.calculateHash();
+        }
+        System.out.println("Block Mined!!! : " + this.hash);
+    }
+
 }
