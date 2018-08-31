@@ -25,9 +25,9 @@ public class Blockchain_Demo {
         // TODO code application logic here
         blockchain.generateGenesisBlock();
 
-        blockchain.addBlock(new Block("Yo im the second block", blockchain.getCurrentBlock().hash));
+        blockchain.addBlock(new Block("Yo im the second block"));
 
-        blockchain.addBlock(new Block("Hey im the third block", blockchain.getCurrentBlock().hash));
+        blockchain.addBlock(new Block("Hey im the third block"));
 
         System.out.println("\nBlockchain is Valid: " + blockchain.isChainValid());
         
